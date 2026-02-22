@@ -1,8 +1,6 @@
 package com.example.data_security.controller;
 
 import com.example.data_security.dto.QRDataDTO;
-import com.example.data_security.util.CompressionUtil;
-import com.example.data_security.util.JwtUtil;
 import com.example.data_security.util.CustomJWTUtil;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;

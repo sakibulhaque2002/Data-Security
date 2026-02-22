@@ -23,16 +23,21 @@ public class CustomJWTUtil {
    * Generate custom token: payload + "." + signature
    */
   public String generateToken(Map<String, Object> claims){
-    // 1. Convert claims map to JSON
+
+    // 1. Add a nonce automatically
+    String nonce = NonceUtil.create();
+    claims.put("nonce", nonce);
+
+    // 2. Convert claims to JSON
     String jsonPayload = objectMapper.writeValueAsString(claims);
 
-    // 2. Base64 encode the payload
+    // 3. Base64 encode payload
     String payload = Base64.getUrlEncoder().withoutPadding().encodeToString(jsonPayload.getBytes());
 
-    // 3. Generate signature using HMAC-SHA256
+    // 4. Sign payload with HMAC
     String signature = signData(payload);
 
-    // 4. Return custom token: payload.signature
+    // 5. Return JWT
     return payload + "." + signature;
   }
 
