@@ -24,10 +24,6 @@ public class CustomJWTUtil {
    */
   public String generateToken(Map<String, Object> claims){
 
-    // 1. Add a nonce automatically
-    String nonce = NonceUtil.create();
-    claims.put("nonce", nonce);
-
     // 2. Convert claims to JSON
     String jsonPayload = objectMapper.writeValueAsString(claims);
 

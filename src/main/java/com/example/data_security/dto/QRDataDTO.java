@@ -19,4 +19,5 @@ public class QRDataDTO {
   private String error_level;
   private MultipartFile logo_image;
   private Double logo_scale;
+  private Long nonce_lifetime;
 }

@@ -10,20 +10,19 @@ import java.util.Base64;
 public final class NonceUtil {
 
   private static final String HMAC_ALGO = "HmacSHA256";
-  private static final String SECRET_KEY = "super-secret-shared-key"; // use same as JWT secret
-  private static final long DEFAULT_NONCE_LIFE_SECONDS = 24 * 60 * 60; // 24h
+  private static final String SECRET_KEY = "super-secret-shared-key";
 
   private NonceUtil() {}
 
   /** Generate a new time-based nonce */
-  public static String create() {
-    long tick = getTick(DEFAULT_NONCE_LIFE_SECONDS);
+  public static String create(long lifeTimeSeconds) {
+    long tick = getTick(lifeTimeSeconds);
     return generateNonce(tick);
   }
 
   /** Verify a nonce */
-  public static boolean verify(String nonce) {
-    long currentTick = getTick(DEFAULT_NONCE_LIFE_SECONDS);
+  public static boolean verify(String nonce, long lifeTimeSeconds) {
+    long currentTick = getTick(lifeTimeSeconds);
 
     // current tick
     if (constantTimeEquals(nonce, generateNonce(currentTick))) return true;

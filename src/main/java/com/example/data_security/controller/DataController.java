@@ -2,6 +2,7 @@ package com.example.data_security.controller;
 
 import com.example.data_security.dto.QRDataDTO;
 import com.example.data_security.util.CustomJWTUtil;
+import com.example.data_security.util.NonceUtil;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +42,18 @@ public class DataController {
       claims.put("logo_image", logoBase64);
       claims.put("logo_scale", qrData.getLogo_scale());
     }
+
+    // ⏳ Get lifetime from user (with safety cap)
+    long defaultTime = 24 * 60 * 60; // 24 hours in seconds
+    long lifetime = qrData.getNonce_lifetime() != null
+        ? qrData.getNonce_lifetime()
+        : defaultTime; // fallback
+
+    claims.put("nonce_lifetime", lifetime);
+
+    // 🔐 Create nonce using user lifetime
+    String nonce = NonceUtil.create(lifetime);
+    claims.put("nonce", nonce);
 
     Map<String, String> response = new HashMap<>();
     String customJwt = customJwtUtil.generateToken(claims);
